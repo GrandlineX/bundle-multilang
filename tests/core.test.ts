@@ -1,38 +1,46 @@
-
- import * as Path from 'path';
-
-import { TestKernel} from './DebugClasses';
- import {
-  createFolderIfNotExist, removeFolderIfExist, sleep
-} from "@grandlinex/core";
- import LangModule, { LangClient } from '../src';
-
-
+import * as Path from 'path';
+import {
+    createFolderIfNotExist,
+    setupDevKernel, TestContext,
+    TestKernel,
+} from '@grandlinex/core';
+import LangModule, {LangClient} from "../src";
 
 const appName = 'TestKernel';
 const appCode = 'tkernel';
 const msiPath = Path.join(__dirname, '..', 'data');
 const testPath = Path.join(__dirname, '..', 'data', 'config');
 
+const pathToTranslation=Path.join(__dirname,"res");
+const defaultLangKey="en";
 
- createFolderIfNotExist(msiPath);
- createFolderIfNotExist(testPath);
+createFolderIfNotExist(msiPath);
+createFolderIfNotExist(testPath);
+const [kernel] = TestContext.getEntity(
+    {
+        kernel:new TestKernel(appName, appCode, testPath, __dirname),
+        cleanUpPath: testPath
+    }
+);
+const store = kernel.getConfigStore();
+store.set(LangClient.STORE_TRANSLATION_PATH,pathToTranslation)
 
+kernel.addModule(new LangModule(kernel,defaultLangKey));
 
-let kernel = new TestKernel(appName,appCode,testPath);
-
+setupDevKernel(kernel);
 
 describe('Clean start', () => {
-   test('preload', async () => {
-    expect(kernel.getState()).toBe('init');
-  });
-  test('start kernel', async () => {
-    const result = await kernel.start();
-    expect(result).toBe(true);
-    expect(kernel.getModCount()).toBe(1);
-    expect(kernel.getState()).toBe('running');
-  });})
-
+    test('preload', async () => {
+        expect(kernel.getState()).toBe('init');
+    });
+    test('start kernel', async () => {
+        const result = await kernel.start();
+        expect(result).toBe(true);
+        expect(kernel.getModCount()).toBe(3);
+        expect(kernel.getState()).toBe('running');
+    });
+});
+require('@grandlinex/core/dist/dev/lib/core');
 
 describe('TestDatabase', () => {
 
@@ -46,7 +54,7 @@ describe('TestDatabase', () => {
  describe("MultiLang", ()=>{
    const mod= kernel.getChildModule("lang") as LangModule
     test("lang key in db",async ()=>{
-      expect(await kernel.getDb()?.configExist(LangClient.DEFAULT_LANG_DB_KEY)).toBeTruthy()
+      expect(await kernel.getDb().configExist(LangClient.DEFAULT_LANG_DB_KEY)).toBeTruthy()
       const config=await kernel.getDb()?.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
       expect(config).not.toBeNull();
       expect(config?.c_value).toBe("en")
@@ -83,21 +91,5 @@ describe('TestDatabase', () => {
    })
  })
 
-describe("ShutDown",()=>{
 
-  test('exit kernel', async () => {
-    const result = await kernel.stop();
-
-    await sleep(1000);
-
-    expect(kernel.getState()).toBe('exited');
-
-    expect(result).toBeTruthy();
-  });
-
-  test('cleanup', async () => {
-
-    expect(removeFolderIfExist(testPath)).not.toBeFalsy()
-  });
-})
-
+require('@grandlinex/core/dist/dev/lib/end');

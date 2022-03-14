@@ -1,4 +1,4 @@
-import { CoreClient, CoreDBCon, ICoreKernelModule } from '@grandlinex/core';
+import { CoreClient, ICoreKernelModule } from '@grandlinex/core';
 import * as Path from 'path';
 import * as fs from 'fs';
 import { LangData } from '../lib';
@@ -35,7 +35,7 @@ export default class LangClient extends CoreClient {
   }
 
   async getCur(): Promise<LangData | null> {
-    const db = this.getKernel().getDb() as CoreDBCon<any, any>;
+    const db = this.getKernel().getDb();
     if (await db.configExist(LangClient.DEFAULT_LANG_DB_KEY)) {
       const code = await db.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
       if (code && this.hasLang(code.c_value)) {
