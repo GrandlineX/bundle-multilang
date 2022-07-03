@@ -1,10 +1,16 @@
-import { CoreClient, ICoreKernelModule } from '@grandlinex/core';
+import { CoreClient, ICoreKernel, ICoreKernelModule } from '@grandlinex/core';
 import * as Path from 'path';
 import * as fs from 'fs';
 import { LangData } from '../lib';
 import GLang from '../class/GLang';
 
-export default class LangClient extends CoreClient {
+export default class LangClient extends CoreClient<
+  ICoreKernel<any>,
+  null,
+  LangClient,
+  null,
+  null
+> {
   static STORE_TRANSLATION_PATH = 'GLX_TRANSLATION_PATH';
 
   static DEFAULT_LANG_DB_KEY = 'lang';
