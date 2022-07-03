@@ -1,4 +1,4 @@
-import { CoreBundleModule, CoreDBCon, ICoreKernel } from '@grandlinex/core';
+import { CoreBundleModule, ICoreKernel } from '@grandlinex/core';
 import LangClient from './client/LangClient';
 
 export default class LangModule extends CoreBundleModule<
@@ -13,14 +13,6 @@ export default class LangModule extends CoreBundleModule<
   constructor(kernel: ICoreKernel<any>, defaultLang: string) {
     super('lang', kernel);
     this.defaultLang = defaultLang;
-  }
-
-  beforeServiceStart(): Promise<void> {
-    return Promise.resolve(undefined);
-  }
-
-  final(): Promise<void> {
-    return Promise.resolve(undefined);
   }
 
   async initModule(): Promise<void> {
