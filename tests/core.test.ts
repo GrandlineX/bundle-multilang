@@ -1,21 +1,16 @@
 import * as Path from 'path';
 import {
-    createFolderIfNotExist,
     setupDevKernel, TestContext,
-    TestKernel,
+    TestKernel, XUtil,
 } from '@grandlinex/core';
 import LangModule, {LangClient} from "../src";
 
 const appName = 'TestKernel';
 const appCode = 'tkernel';
-const msiPath = Path.join(__dirname, '..', 'data');
-const testPath = Path.join(__dirname, '..', 'data', 'config');
-
+const [testPath] =XUtil.setupEnvironment([__dirname,'..'],['data','config'])
 const pathToTranslation=Path.join(__dirname,"res");
 const defaultLangKey="en";
 
-createFolderIfNotExist(msiPath);
-createFolderIfNotExist(testPath);
 const [kernel] = TestContext.getEntity(
     {
         kernel:new TestKernel(appName, appCode, testPath, __dirname),
