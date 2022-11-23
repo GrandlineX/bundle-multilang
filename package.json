@@ -1,6 +1,6 @@
 {
   "name": "@grandlinex/bundle-multilang",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
