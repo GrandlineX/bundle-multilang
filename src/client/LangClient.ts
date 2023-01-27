@@ -3,10 +3,13 @@ import * as Path from 'path';
 import * as fs from 'fs';
 import { LangData } from '../lib';
 import GLang from '../class/GLang';
+import LangDb from '../db/LangDb';
+import Language from '../db/entity/Language';
+import Translation from '../db/entity/Translation';
 
 export default class LangClient extends CoreClient<
   ICoreKernel<any>,
-  null,
+  LangDb,
   LangClient,
   null,
   null
@@ -15,61 +18,72 @@ export default class LangClient extends CoreClient<
 
   static DEFAULT_LANG_DB_KEY = 'lang';
 
-  langs: LangData[];
-
-  path: string;
-
-  constructor(
-    module: ICoreKernelModule<any, any, any, any, any>,
-    path: string
-  ) {
+  constructor(module: ICoreKernelModule<any, any, any, any, any>) {
     super('lang-client', module);
-    this.langs = [];
-    this.path = path;
   }
 
-  hasLang(code: string): boolean {
-    return !!this.langs.find((lang) => lang.code === code);
+  async hasLang(code: string): Promise<boolean> {
+    return !!(await this.getModule().getDb().lang.getObjById(code));
   }
 
-  getLang(code: string): LangData | undefined {
-    return this.langs.find((lang) => lang.code === code);
+  async getLang(code: string): Promise<LangData | undefined> {
+    const db = this.getModule().getDb();
+    const lang = await db.lang.getObjById(code);
+    if (!lang) {
+      return undefined;
+    }
+
+    const d = await db.translations.getObjList({
+      search: {
+        t_lang: lang.e_id,
+      },
+    });
+    const nlang: LangData = {
+      label: lang.label,
+      code: lang.e_id,
+      data: d,
+    };
+
+    return nlang;
   }
 
-  getDefault(): LangData | undefined {
-    return this.langs[0];
+  async getDefault(): Promise<LangData | undefined> {
+    return this.getLang(await this.getDbLang());
   }
 
   async getCur(): Promise<LangData | null> {
-    const db = this.getKernel().getDb();
+    const db = this.getModule().getDb();
     if (await db.configExist(LangClient.DEFAULT_LANG_DB_KEY)) {
       const code = await db.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
-      if (code && this.hasLang(code.c_value)) {
-        const lang = this.getLang(code.c_value);
+      if (code && (await this.hasLang(code.c_value))) {
+        const lang = await this.getLang(code.c_value);
         if (lang) {
           return lang;
         }
       }
     }
-    return this.getDefault() || null;
+    return (await this.getDefault()) || null;
   }
 
   async getCurTranslator(): Promise<GLang> {
     return new GLang(await this.getCur(), this);
   }
 
-  getLangList(): { code: string; label: string }[] {
-    return this.langs.map(({ code, label }) => ({
-      code,
-      label,
-    }));
+  async getLangList(): Promise<{ code: string; label: string }[]> {
+    return (await this.getModule().getDb().lang.getObjList()).map(
+      ({ e_id, label }) => ({
+        code: e_id,
+        label,
+      })
+    );
   }
 
-  async loadLangFromFolder() {
-    const info = fs.statSync(this.path);
-    this.debug(this.path);
+  async loadLangFromFolder(path: string) {
+    const info = fs.statSync(path);
+    const db = this.getModule().getDb();
+    this.debug(path);
     if (info.isDirectory()) {
-      const el = fs.readdirSync(this.path, {
+      const el = fs.readdirSync(path, {
         withFileTypes: true,
       });
       for (const item of el) {
@@ -78,24 +92,29 @@ export default class LangClient extends CoreClient<
           const file = item.name.split('.')[0];
           const name = file.split('-')[1];
           const code = file.split('-')[0];
-          const nlang: LangData = {
-            label: name,
-            code,
-            data: [],
-          };
-          const stream = fs.readFileSync(Path.join(this.path, item.name), {
-            encoding: 'utf-8',
-          });
-          const json = JSON.parse(stream);
-          const keys = Object.keys(json);
-          for (const key of keys) {
-            nlang.data.push({
-              key,
-              value: json[key],
+          const langExist = await db.lang.getObjById(code);
+          if (langExist) {
+            this.log(`skip lang: ${code}-${name}`);
+          } else {
+            const lang = await db.lang.createObject(
+              new Language({ code, label: name })
+            );
+            const stream = fs.readFileSync(Path.join(path, item.name), {
+              encoding: 'utf-8',
             });
+            const json = JSON.parse(stream);
+            const keys = Object.keys(json);
+            for (const key of keys) {
+              await db.translations.createObject(
+                new Translation({
+                  key,
+                  value: json[key],
+                  t_lang: lang.e_id,
+                })
+              );
+            }
+            this.log(`load lang: ${code}-${name}`);
           }
-          this.langs.push(nlang);
-          this.log(`load lang: ${nlang.code}-${nlang.label}`);
         }
       }
     } else {
@@ -105,16 +124,16 @@ export default class LangClient extends CoreClient<
   }
 
   async setDbLang(lang: string): Promise<void> {
-    const db = this.getKernel().getDb();
-    if (this.hasLang(lang) && db) {
+    const db = this.getModule().getDb();
+    if ((await this.hasLang(lang)) && db) {
       await db.setConfig(LangClient.DEFAULT_LANG_DB_KEY, lang);
     } else {
       throw this.lError('Lang not exist');
     }
   }
 
-  async getDbLang(): Promise<string | null> {
-    const db = this.getKernel().getDb();
+  async getDbLang(): Promise<string> {
+    const db = this.getModule().getDb();
 
     if (await db?.configExist(LangClient.DEFAULT_LANG_DB_KEY)) {
       const code = await db?.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
@@ -122,6 +141,6 @@ export default class LangClient extends CoreClient<
         return code.c_value;
       }
     }
-    return null;
+    return 'en';
   }
 }

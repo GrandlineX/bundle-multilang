@@ -1,5 +1,6 @@
 import * as Path from 'path';
 import {
+    InMemDB,
     setupDevKernel, TestContext,
     TestKernel, XUtil,
 } from '@grandlinex/core';
@@ -20,7 +21,7 @@ const [kernel] = TestContext.getEntity(
 const store = kernel.getConfigStore();
 store.set(LangClient.STORE_TRANSLATION_PATH,pathToTranslation)
 
-kernel.addModule(new LangModule(kernel,defaultLangKey));
+kernel.addModule(new LangModule(kernel,defaultLangKey,(mod)=>new InMemDB(mod)));
 
 setupDevKernel(kernel);
 
@@ -49,8 +50,8 @@ describe('TestDatabase', () => {
  describe("MultiLang", ()=>{
    const mod= kernel.getChildModule("lang") as LangModule
     test("lang key in db",async ()=>{
-      expect(await kernel.getDb().configExist(LangClient.DEFAULT_LANG_DB_KEY)).toBeTruthy()
-      const config=await kernel.getDb()?.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
+      expect(await mod.getDb().configExist(LangClient.DEFAULT_LANG_DB_KEY)).toBeTruthy()
+      const config=await mod.getDb()?.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
       expect(config).not.toBeNull();
       expect(config?.c_value).toBe("en")
     })
@@ -59,11 +60,11 @@ describe('TestDatabase', () => {
 
       expect(await client.getDbLang()).toBe("en");
 
-      expect(client.hasLang("en")).toBeTruthy()
-      expect(client.hasLang("de")).toBeTruthy()
-      expect(client.hasLang("fr")).toBeFalsy()
+      expect(await client.hasLang("en")).toBeTruthy()
+      expect(await client.hasLang("de")).toBeTruthy()
+      expect(await client.hasLang("fr")).toBeFalsy()
 
-     const list  = client.getLangList()
+     const list  = await client.getLangList()
      expect(list.length).toBe(2);
 
      expect(await client.getDefault()).not.toBeUndefined();

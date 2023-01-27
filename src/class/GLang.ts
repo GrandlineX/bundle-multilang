@@ -1,4 +1,4 @@
-import { CoreLogChannel } from '@grandlinex/core';
+import { CMap, CoreLogChannel } from '@grandlinex/core';
 import { LangData } from '../lib';
 
 export default class GLang {
@@ -11,7 +11,7 @@ export default class GLang {
   constructor(langDat: LangData | null, log?: CoreLogChannel) {
     this.log = log;
     this.code = '';
-    this.map = new Map<string, string>();
+    this.map = new CMap<string, string>();
     if (langDat) {
       this.loadLang(langDat);
     }
