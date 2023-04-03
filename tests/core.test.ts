@@ -1,6 +1,6 @@
 import * as Path from 'path';
 import {
-    InMemDB,
+    InMemDB, JestLib,
     setupDevKernel, TestContext,
     TestKernel, XUtil,
 } from '@grandlinex/core';
@@ -36,8 +36,7 @@ describe('Clean start', () => {
         expect(kernel.getState()).toBe('running');
     });
 });
-require('@grandlinex/core/dist/dev/lib/core');
-
+JestLib.jestCore();
 describe('TestDatabase', () => {
 
   test('get version', async () => {
@@ -87,5 +86,5 @@ describe('TestDatabase', () => {
    })
  })
 
+JestLib.jestEnd();
 
-require('@grandlinex/core/dist/dev/lib/end');
