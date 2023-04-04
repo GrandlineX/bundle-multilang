@@ -1,6 +1,6 @@
 import { CoreDBPrefab, CoreEntityWrapper, IDataBase } from '@grandlinex/core';
-import Translation from './entity/Translation';
-import Language from './entity/Language';
+import Translation from './entity/Translation.js';
+import Language from './entity/Language.js';
 
 export default class LangDb extends CoreDBPrefab<any> {
   translations: CoreEntityWrapper<Translation>;

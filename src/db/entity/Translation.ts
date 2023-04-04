@@ -5,7 +5,7 @@ import {
   EntityColumn,
   EProperties,
 } from '@grandlinex/core';
-import Language from './Language';
+import Language from './Language.js';
 
 @Entity('Translation')
 export default class Translation extends CoreEntity {

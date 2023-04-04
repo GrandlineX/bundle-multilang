@@ -1,5 +1,5 @@
 import { CMap, CoreLogChannel } from '@grandlinex/core';
-import { LangData } from '../lib';
+import { LangData } from '../lib/index.js';
 
 export default class GLang {
   code: string;

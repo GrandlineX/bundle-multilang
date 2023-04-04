@@ -1,6 +1,6 @@
 import { CoreBundleModule, ICoreKernel, IDataBase } from '@grandlinex/core';
-import LangClient from './client/LangClient';
-import LangDb from './db/LangDb';
+import LangClient from './client/LangClient.js';
+import LangDb from './db/LangDb.js';
 
 export default class LangModule extends CoreBundleModule<
   ICoreKernel<any>,

@@ -4,7 +4,7 @@ import {
     setupDevKernel, TestContext,
     TestKernel, XUtil,
 } from '@grandlinex/core';
-import LangModule, {LangClient} from "../src";
+import LangModule, {LangClient} from "../index.js";
 
 const appName = 'TestKernel';
 const appCode = 'tkernel';
