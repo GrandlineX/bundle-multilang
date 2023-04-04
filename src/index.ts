@@ -1,8 +1,8 @@
-import GLang from './class/GLang';
-import LangClient from './client/LangClient';
-import LangModule from './LangModule';
+import GLang from './class/GLang.js';
+import LangClient from './client/LangClient.js';
+import LangModule from './LangModule.js';
 
-export * from './lib';
+export * from './lib/index.js';
 
 export { GLang, LangModule, LangClient };
 export default LangModule;

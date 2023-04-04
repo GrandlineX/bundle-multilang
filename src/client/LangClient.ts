@@ -1,11 +1,11 @@
 import { CoreClient, ICoreKernel, ICoreKernelModule } from '@grandlinex/core';
 import * as Path from 'path';
 import * as fs from 'fs';
-import { LangData } from '../lib';
-import GLang from '../class/GLang';
-import LangDb from '../db/LangDb';
-import Language from '../db/entity/Language';
-import Translation from '../db/entity/Translation';
+import { LangData } from '../lib/index.js';
+import GLang from '../class/GLang.js';
+import LangDb from '../db/LangDb.js';
+import Language from '../db/entity/Language.js';
+import Translation from '../db/entity/Translation.js';
 
 export default class LangClient extends CoreClient<
   ICoreKernel<any>,
