@@ -1,7 +1,7 @@
-type Translation = { key: string; value: string };
+type TranslationType = { key: string; value: string };
 type LangData = {
   code: string;
   label: string;
-  data: Translation[];
+  data: TranslationType[];
 };
-export { Translation, LangData };
+export { TranslationType, LangData };
