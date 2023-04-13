@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="132" lines-covered="123" line-rate="0.9318000000000001" branches-valid="37" branches-covered="28" branch-rate="0.7567" timestamp="1680643577579" complexity="0" version="0.1">
+<coverage lines-valid="137" lines-covered="128" line-rate="0.9343" branches-valid="37" branches-covered="28" branch-rate="0.7567" timestamp="1681402688280" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/bundle-multilang/bundle-multilang</source>
   </sources>
   <packages>
-    <package name="src" line-rate="0.9615" branch-rate="0.5">
+    <package name="src" line-rate="0.9629000000000001" branch-rate="0.5">
       <classes>
         <class name="LangModule.ts" filename="src/LangModule.ts" line-rate="0.95" branch-rate="0.5">
           <methods>
@@ -61,8 +61,9 @@
             <line number="2" hits="1" branch="false"/>
             <line number="3" hits="1" branch="false"/>
             <line number="5" hits="1" branch="false"/>
-            <line number="7" hits="1" branch="false"/>
+            <line number="6" hits="1" branch="false"/>
             <line number="8" hits="1" branch="false"/>
+            <line number="9" hits="1" branch="false"/>
           </lines>
         </class>
       </classes>
@@ -277,6 +278,16 @@
             <line number="12" hits="1" branch="false"/>
             <line number="13" hits="1" branch="false"/>
             <line number="17" hits="1" branch="false"/>
+          </lines>
+        </class>
+        <class name="index.ts" filename="src/db/index.ts" line-rate="1" branch-rate="1">
+          <methods>
+          </methods>
+          <lines>
+            <line number="1" hits="1" branch="false"/>
+            <line number="2" hits="1" branch="false"/>
+            <line number="3" hits="1" branch="false"/>
+            <line number="5" hits="1" branch="false"/>
           </lines>
         </class>
       </classes>
