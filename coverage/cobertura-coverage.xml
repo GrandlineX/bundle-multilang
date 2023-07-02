@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="137" lines-covered="128" line-rate="0.9343" branches-valid="37" branches-covered="28" branch-rate="0.7567" timestamp="1681402688280" complexity="0" version="0.1">
+<coverage lines-valid="137" lines-covered="128" line-rate="0.9343" branches-valid="37" branches-covered="28" branch-rate="0.7567" timestamp="1688311428981" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/bundle-multilang/bundle-multilang</source>
   </sources>
