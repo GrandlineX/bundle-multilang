@@ -3,7 +3,7 @@ SF:src/LangModule.ts
 FN:14,(anonymous_1)
 FN:26,(anonymous_2)
 FN:31,(anonymous_3)
-FN:46,(anonymous_4)
+FN:47,(anonymous_4)
 FNF:4
 FNH:4
 FNDA:1,(anonymous_1)
@@ -29,9 +29,10 @@ DA:38,0
 DA:40,1
 DA:41,1
 DA:42,1
-DA:47,1
-LF:20
-LH:19
+DA:44,1
+DA:48,1
+LF:21
+LH:20
 BRDA:35,0,0,1
 BRDA:37,1,0,0
 BRF:2
