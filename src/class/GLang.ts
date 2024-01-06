@@ -6,12 +6,15 @@ export default class GLang {
 
   map: Map<string, string>;
 
+  missing: Set<string>;
+
   log?: CoreLogChannel;
 
   constructor(langDat: LangData | null, log?: CoreLogChannel) {
     this.log = log;
     this.code = '';
     this.map = new CMap<string, string>();
+    this.missing = new Set<string>();
     if (langDat) {
       this.loadLang(langDat);
     }
@@ -43,6 +46,7 @@ export default class GLang {
       console.warn(`Missing translation: ${key}`);
     }
 
+    this.missing.add(key);
     return key;
   }
 }
