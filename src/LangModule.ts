@@ -41,7 +41,7 @@ export default class LangModule extends CoreBundleModule<
       await client.setDbLang(this.defaultLang);
       await this.getDb().setConfig('init', 'true');
     }
-    await this.getKernel().triggerFunction('lang-loaded');
+    await this.getKernel().triggerEvent('lang-loaded');
   }
 
   initBundleModule(): Promise<void> {
