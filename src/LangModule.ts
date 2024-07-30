@@ -15,8 +15,8 @@ export default class LangModule extends CoreBundleModule<
     kernel: ICoreKernel<any>,
     defaultLang: string,
     dbFc: (
-      mod: CoreBundleModule<any, any, any, any, any>
-    ) => IDataBase<any, any>
+      mod: CoreBundleModule<any, any, any, any, any>,
+    ) => IDataBase<any, any>,
   ) {
     super('lang', kernel);
     this.defaultLang = defaultLang;

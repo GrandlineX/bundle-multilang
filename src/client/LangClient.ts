@@ -74,7 +74,7 @@ export default class LangClient extends CoreClient<
       ({ e_id, label }) => ({
         code: e_id,
         label,
-      })
+      }),
     );
   }
 
@@ -97,7 +97,7 @@ export default class LangClient extends CoreClient<
             this.log(`skip lang: ${code}-${name}`);
           } else {
             const lang = await db.lang.createObject(
-              new Language({ code, label: name })
+              new Language({ code, label: name }),
             );
             const stream = fs.readFileSync(Path.join(path, item.name), {
               encoding: 'utf-8',
@@ -110,7 +110,7 @@ export default class LangClient extends CoreClient<
                   key,
                   value: json[key],
                   t_lang: lang.e_id,
-                })
+                }),
               );
             }
             this.log(`load lang: ${code}-${name}`);
