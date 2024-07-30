@@ -1,6 +1,6 @@
 {
   "name": "@grandlinex/bundle-multilang",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "type": "module",
   "exports": {
@@ -45,7 +45,7 @@
   },
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@grandlinex/core": "1.0.0"
+    "@grandlinex/core": "1.0.1"
   },
   "devDependencies": {
     "@types/jest": "29.5.12",
