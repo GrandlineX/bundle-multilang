@@ -76,6 +76,20 @@ describe('TestDatabase', () => {
      expect(t.get("test.key.second")).toBe("helloWorldEn2")
      expect(t.get("test.key.third")).toBe("test.key.third")
    })
+   test("translator-default",async ()=>{
+     const client = mod.getClient()  as LangClient;
+     const t= await client.getCurTranslator(["default"]);
+     expect(t.get("test.key.first")).toBe("helloWorldEn")
+     expect(t.get("test.key.second")).toBe("helloWorldEn2")
+     expect(t.get("test.key.third")).toBe("test.key.third")
+   })
+   test("translator-missing",async ()=>{
+     const client = mod.getClient()  as LangClient;
+     const t= await client.getCurTranslator(["missing"]);
+     expect(t.get("test.key.first")).toBe("test.key.first")
+     expect(t.get("test.key.second")).toBe("test.key.second")
+     expect(t.get("test.key.third")).toBe("test.key.third")
+   })
    test("translator clear",async ()=>{
      const client = mod.getClient()  as LangClient;
      const t= await client.getCurTranslator();

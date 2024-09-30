@@ -26,18 +26,35 @@ export default class LangClient extends CoreClient<
     return !!(await this.getModule().getDb().lang.getObjById(code));
   }
 
-  async getLang(code: string): Promise<LangData | undefined> {
+  async getLang(
+    code: string,
+    scopes?: string[],
+  ): Promise<LangData | undefined> {
     const db = this.getModule().getDb();
     const lang = await db.lang.getObjById(code);
     if (!lang) {
       return undefined;
     }
+    let d: Translation[] = [];
+    if (!scopes) {
+      d = await db.translations.getObjList({
+        search: {
+          t_lang: lang.e_id,
+        },
+      });
+    } else {
+      for (const scope of scopes) {
+        d = d.concat(
+          await db.translations.getObjList({
+            search: {
+              t_lang: lang.e_id,
+              scope,
+            },
+          }),
+        );
+      }
+    }
 
-    const d = await db.translations.getObjList({
-      search: {
-        t_lang: lang.e_id,
-      },
-    });
     const nlang: LangData = {
       label: lang.label,
       code: lang.e_id,
@@ -47,16 +64,16 @@ export default class LangClient extends CoreClient<
     return nlang;
   }
 
-  async getDefault(): Promise<LangData | undefined> {
-    return this.getLang(await this.getDbLang());
+  async getDefault(scopes?: string[]): Promise<LangData | undefined> {
+    return this.getLang(await this.getDbLang(), scopes);
   }
 
-  async getCur(): Promise<LangData | null> {
+  async getCur(scopes?: string[]): Promise<LangData | null> {
     const db = this.getModule().getDb();
     if (await db.configExist(LangClient.DEFAULT_LANG_DB_KEY)) {
       const code = await db.getConfig(LangClient.DEFAULT_LANG_DB_KEY);
       if (code && (await this.hasLang(code.c_value))) {
-        const lang = await this.getLang(code.c_value);
+        const lang = await this.getLang(code.c_value, scopes);
         if (lang) {
           return lang;
         }
@@ -65,8 +82,8 @@ export default class LangClient extends CoreClient<
     return (await this.getDefault()) || null;
   }
 
-  async getCurTranslator(): Promise<GLang> {
-    return new GLang(await this.getCur(), this);
+  async getCurTranslator(scopes?: string[]): Promise<GLang> {
+    return new GLang(await this.getCur(scopes), this);
   }
 
   async getLangList(): Promise<{ code: string; label: string }[]> {
@@ -78,7 +95,7 @@ export default class LangClient extends CoreClient<
     );
   }
 
-  async loadLangFromFolder(path: string) {
+  async loadLangFromFolder(path: string, scope = 'default'): Promise<void> {
     const info = fs.statSync(path);
     const db = this.getModule().getDb();
     this.debug(path);
@@ -108,6 +125,7 @@ export default class LangClient extends CoreClient<
               await db.translations.createObject(
                 new Translation({
                   key,
+                  scope,
                   value: json[key],
                   t_lang: lang.e_id,
                 }),

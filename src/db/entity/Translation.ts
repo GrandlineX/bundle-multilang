@@ -19,6 +19,11 @@ export default class Translation extends CoreEntity {
   })
   value: string;
 
+  @Column({
+    dataType: 'string',
+  })
+  scope: string;
+
   @EntityColumn(new Language())
   t_lang: string;
 
@@ -27,5 +32,6 @@ export default class Translation extends CoreEntity {
     this.key = props?.key || '';
     this.value = props?.value || '';
     this.t_lang = props?.t_lang || '';
+    this.scope = props?.scope || 'default';
   }
 }
