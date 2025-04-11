@@ -26,6 +26,18 @@ export default class LangClient extends CoreClient<
     return !!(await this.getModule().getDb().lang.getObjById(code));
   }
 
+  async getAllTranslation(): Promise<Translation[]> {
+    const db = this.getModule().getDb();
+    return db.translations.getObjList({
+      order: [
+        {
+          key: 'key',
+          order: 'ASC',
+        },
+      ],
+    });
+  }
+
   async getLang(
     code: string,
     scopes?: string[],
