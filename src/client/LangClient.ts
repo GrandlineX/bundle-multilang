@@ -1,4 +1,4 @@
-import { CoreClient, ICoreKernel, ICoreKernelModule } from '@grandlinex/core';
+import { CoreClient, ICoreKernel } from '@grandlinex/core';
 import * as Path from 'path';
 import * as fs from 'fs';
 import { LangData } from '../lib/index.js';
@@ -17,10 +17,6 @@ export default class LangClient extends CoreClient<
   static STORE_TRANSLATION_PATH = 'GLX_TRANSLATION_PATH';
 
   static DEFAULT_LANG_DB_KEY = 'lang';
-
-  constructor(module: ICoreKernelModule<any, any, any, any, any>) {
-    super('lang-client', module);
-  }
 
   async hasLang(code: string): Promise<boolean> {
     return !!(await this.getModule().getDb().lang.getObjById(code));
