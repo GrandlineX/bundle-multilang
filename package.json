@@ -1,6 +1,6 @@
 {
   "name": "@grandlinex/bundle-multilang",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0",
   "description": "",
   "type": "module",
   "exports": {
@@ -45,7 +45,7 @@
   },
   "license": "BSD-3-Clause",
   "peerDependencies": {
-    "@grandlinex/core": "2.0.0-alpha.4"
+    "@grandlinex/core": "2.0.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.14",
