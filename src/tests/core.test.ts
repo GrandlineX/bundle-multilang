@@ -2,20 +2,19 @@ import * as Path from 'path';
 import {
     InMemDB, JestLib,
     setupDevKernel, TestContext,
-    TestKernel, XUtil,
+    TestKernel,
 } from '@grandlinex/core';
 import LangModule, {LangClient} from "../index.js";
 
 const appName = 'TestKernel';
 const appCode = 'tkernel';
-const [testPath] =XUtil.setupEnvironment([__dirname,'..'],['data','config'])
 const pathToTranslation=Path.join(__dirname,"res");
 const defaultLangKey="en";
 
 const [kernel] = TestContext.getEntity(
     {
-        kernel:new TestKernel(appName, appCode, testPath, __dirname),
-        cleanUpPath: testPath
+        kernel:new TestKernel(appName, appCode,__dirname),
+        cleanUp:true
     }
 );
 const store = kernel.getConfigStore();
